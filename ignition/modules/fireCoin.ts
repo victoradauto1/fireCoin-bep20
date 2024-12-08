@@ -4,11 +4,11 @@
 import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
 
 
-const ProtoCoinModule = buildModule("ProtoCoinModule", (m) => {
+const fireCoinModule = buildModule("FireCoinModule", (m) => {
 
-  const protocoin = m.contract("ProtoCoin");
+  const firecoin = m.contract("FireCoin");
 
-  return { protocoin };
+  return { firecoin };
 });
 
-export default ProtoCoinModule;
+export default fireCoinModule;
