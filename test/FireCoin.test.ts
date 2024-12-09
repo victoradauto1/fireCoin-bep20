@@ -1,5 +1,6 @@
 import {
   loadFixture,
+  time
 } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 import { expect } from "chai";
 import hre from "hardhat";
@@ -110,5 +111,57 @@ describe("FireCoin tests", function () {
       const instance = fireCoin.connect(otherAccount);
   
       await expect(instance.transferFrom(owner.address, otherAccount.address, 50n)).to.be.revertedWithCustomError(fireCoin, "ERC20InsufficientAllowance");
+    });
+
+    it("Should mint once", async function () {
+      const { fireCoin, owner } = await loadFixture(deployFixture);
+      
+      const mintAmount = 1000n;
+      await fireCoin.setMintingAmount(mintAmount);
+      
+      const balanceBefore = await fireCoin.balanceOf(owner.address);
+      await fireCoin.mint();
+      const balanceAfter = await fireCoin.balanceOf(owner.address);
+      
+      expect(balanceAfter).to.equal(balanceBefore + mintAmount);
+  });
+  
+  it("Should mint twice (differents accounts)", async function () {
+      const { fireCoin, owner } = await loadFixture(deployFixture);
+      
+      const mintAmount = 1000n;
+      await fireCoin.setMintingAmount(mintAmount);
+      
+      const balanceBefore = await fireCoin.balanceOf(owner.address);
+      await fireCoin.mint();
+      const balanceAfter = await fireCoin.balanceOf(owner.address);
+      
+      expect(balanceAfter).to.equal(balanceBefore + mintAmount);
+  });
+
+    it("Should NOT mint amount", async function () {
+      const { fireCoin, owner, otherAccount } = await loadFixture(deployFixture);
+     
+      const mintAmount = 1000n;
+
+      const instance = fireCoin.connect(otherAccount);
+
+      await expect(instance.setMintingAmount(mintAmount)).to.be.revertedWith("Your do not have permission.")
+    });
+
+    it("Should NOT mint", async function () {
+      const { fireCoin, owner, otherAccount } = await loadFixture(deployFixture);
+
+      await expect(fireCoin.mint()).to.be.revertedWith("Minting is not enabled.")
+    });
+
+    it("Should NOT mint twince", async function () {
+      const { fireCoin, owner, otherAccount } = await loadFixture(deployFixture);
+
+      await fireCoin.setMintingAmount(1000n);
+
+      await fireCoin.mint();
+
+      await expect(fireCoin.mint()).to.be.revertedWith("You cannot mint twice in a row.")
     });
 });
