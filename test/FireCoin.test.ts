@@ -22,14 +22,14 @@ describe("FireCoin tests", function () {
       const { fireCoin, owner, otherAccount } = await loadFixture(deployFixture);
 
       const name = await fireCoin.name();
-      expect(name).to.equal("FireCoin")
+      expect(name).to.equal("FireCoinPro2")
     });
 
     it("Should have correct symbol", async function () {
       const { fireCoin, owner, otherAccount } = await loadFixture(deployFixture);
 
       const symbol = await fireCoin.symbol();
-      expect(symbol).to.equal("FRC")
+      expect(symbol).to.equal("FRCP2")
     });
     it("Should have correct decimals", async function () {
       const { fireCoin, owner, otherAccount } = await loadFixture(deployFixture);
@@ -41,7 +41,7 @@ describe("FireCoin tests", function () {
     it("Should have correct amout supply", async function () {
       const { fireCoin, owner, otherAccount } = await loadFixture(deployFixture);
 
-      expect(await fireCoin.totalSupply()).to.equal(1000n * 10n** 18n);
+      expect(await fireCoin.totalSupply()).to.equal(10000000n * 10n** 18n);
     });
 
     it("Should get balance", async function () {
@@ -57,9 +57,9 @@ describe("FireCoin tests", function () {
       await fireCoin.transfer(otherAccount.address, 1n)
       const balanceOwnerAfter = await fireCoin.balanceOf(owner.address);
       const balanceOtherAfter = await fireCoin.balanceOf(otherAccount.address);
-      expect(balanceOwnerBefore).to.equal(1000n * 10n** 18n);
+      expect(balanceOwnerBefore).to.equal(10000000n * 10n** 18n);
       expect(balanceOtherBefore).to.equal(0);
-      expect(balanceOwnerAfter).to.equal((1000n * 10n** 18n) - 1n);
+      expect(balanceOwnerAfter).to.equal((10000000n * 10n** 18n) - 1n);
       expect(balanceOtherAfter).to.equal(1n);
     });
   
@@ -89,9 +89,9 @@ describe("FireCoin tests", function () {
 
       const value = await fireCoin.allowance(owner, otherAccount);
 
-      expect(balanceOwnerBefore).to.equal(1000n * 10n** 18n);
+      expect(balanceOwnerBefore).to.equal(10000000n * 10n** 18n);
       expect(balanceOtherBefore).to.equal(0);
-      expect(balanceOwnerAfter).to.equal((1000n * 10n** 18n) - 5n);
+      expect(balanceOwnerAfter).to.equal((10000000n * 10n** 18n) - 5n);
       expect(balanceOtherAfter).to.equal(5n);
       expect(value).to.equal(5n);
     });
@@ -120,7 +120,7 @@ describe("FireCoin tests", function () {
       await fireCoin.setMintingAmount(mintAmount);
       
       const balanceBefore = await fireCoin.balanceOf(owner.address);
-      await fireCoin.mint();
+      await fireCoin.mint(owner.address);
       const balanceAfter = await fireCoin.balanceOf(owner.address);
       
       expect(balanceAfter).to.equal(balanceBefore + mintAmount);
@@ -133,7 +133,7 @@ describe("FireCoin tests", function () {
       await fireCoin.setMintingAmount(mintAmount);
       
       const balanceBefore = await fireCoin.balanceOf(owner.address);
-      await fireCoin.mint();
+      await fireCoin.mint(owner.address);
       const balanceAfter = await fireCoin.balanceOf(owner.address);
       
       expect(balanceAfter).to.equal(balanceBefore + mintAmount);
@@ -152,7 +152,7 @@ describe("FireCoin tests", function () {
     it("Should NOT mint", async function () {
       const { fireCoin, owner, otherAccount } = await loadFixture(deployFixture);
 
-      await expect(fireCoin.mint()).to.be.revertedWith("Minting is not enabled.")
+      await expect(fireCoin.mint(owner.address)).to.be.revertedWith("Minting is not enabled.")
     });
 
     it("Should NOT mint twince", async function () {
@@ -160,8 +160,8 @@ describe("FireCoin tests", function () {
 
       await fireCoin.setMintingAmount(1000n);
 
-      await fireCoin.mint();
+      await fireCoin.mint(owner.address);
 
-      await expect(fireCoin.mint()).to.be.revertedWith("You cannot mint twice in a row.")
+      await expect(fireCoin.mint(owner.address)).to.be.revertedWith("You cannot mint twice in a row.")
     });
 });

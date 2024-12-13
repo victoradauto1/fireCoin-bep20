@@ -10,16 +10,16 @@ contract FireCoin is ERC20 {
 
     mapping(address => uint256) private _nextMint;
 
-    constructor() ERC20("FireCoin", "FRC") {
+    constructor() ERC20("FireCoinPro2", "FRCP2") {
         _owner = msg.sender;
-        _mint(msg.sender, 1000*10**18);
+        _mint(msg.sender, 10000000*10**18);
     }
 
-    function mint()public restricted {
+    function mint(address to)public restricted {
         require(_mintAmount > 0 , "Minting is not enabled.");
-        require(block.timestamp > _nextMint[msg.sender], "You cannot mint twice in a row.");
-        _mint(msg.sender, _mintAmount);
-        _nextMint[msg.sender] = block.timestamp + _mintDelay;
+        require(block.timestamp > _nextMint[to], "You cannot mint twice in a row.");
+        _mint(to, _mintAmount);
+        _nextMint[to] = block.timestamp + _mintDelay;
     }
 
     function setMintingAmount(uint newAmount) public restricted{

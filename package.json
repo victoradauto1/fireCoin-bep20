@@ -1,5 +1,5 @@
 {
-  "name": "protocoin-ecr20",
+  "name": "firecoin-bep20",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,10 +7,11 @@
     "start": "npx hardhat node",
     "test": "npx hardhat test",
     "compile": "npx hardhat compile",
-    "deploy:local": "npx hardhat ignition deploy ignition/modules/ProtoCoin.ts --network local",
-    "deploy:prod": "npx hardhat ignition deploy ignition/modules/ProtoCoin.ts --network sepolia"
+    "deploy:local": "npx hardhat ignition deploy ignition/modules/FireCoin.ts --network local --show-stack-traces",
+    "deploy:prod": "npx hardhat ignition deploy ignition/modules/FireCoin.ts --network bsctest"
   },
   "devDependencies": {
+    "@nomicfoundation/hardhat-ignition": "^0.15.8",
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@nomiclabs/hardhat-etherscan": "^3.1.8",
     "hardhat": "^2.22.17"
